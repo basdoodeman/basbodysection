@@ -61,6 +61,7 @@
 
     $('head').append('<link rel="stylesheet" href="'+baseUrl+'engine/css/vlightbox1.css" type="text/css" />');
     $('head').append('<link rel="stylesheet" href="'+baseUrl+'engine/css/visuallightbox.css" type="text/css" media="screen" />');
+    $('head').append('<style type="text/css" media="screen">#lightboxImage{margin-bottom: -16px; overflow: hidden;} #imageContainer{margin-bottom: -16px; overflow: hidden;} #imageContainerMain{margin-bottom: 0px; overflow: hidden;}</style>');
 
     $.getScript(baseUrl+'engine/js/visuallightbox.js', function(data, textStatus, jqxhr) {
       if (window.Lightbox == undefined) {
@@ -75,8 +76,39 @@
           resizeSpeed:7,
           slideTime:3,
           startZoom:false
-        })
+        });
+
+        $('#imageContainer div:eq(2)').remove();
+        $('#prevLinkImg').appendTo("#lightboxFrameBody").css('left','-8px');
+        $('#nextLinkImg').appendTo("#lightboxFrameBody").css('right','-8px');
+
+        $('#imageContainer').mouseenter(function() {
+          if ($('#loading').css('display') == 'none' && $('#lightboxImage').css('opacity') == '1') {
+            var highestTimeoutId = setTimeout(function(){},10000);
+            for (var i = 0 ; i < highestTimeoutId ; i++) {
+                clearTimeout(i); 
+            }
+            $('#nextLinkImg').css('background','url('+baseUrl+'/engine/images/next.png) 97% center no-repeat');
+            $('#prevLinkImg').css('background','url('+baseUrl+'/engine/images/prev.png) 97% center no-repeat');
+          }
+        }).mouseleave(function(){
+          if ($('#loading').css('display') == 'none' && $('#lightboxImage').css('opacity') == '1') {
+
+            $('#nextLinkImg').css('background','none');
+            $('#nextLinkImg:hover').css('background','url('+baseUrl+'/engine/images/next.png) 97% center no-repeat');
+            $('#prevLinkImg').css('background','none');
+            $('#prevLinkImg:hover').css('background','url('+baseUrl+'/engine/images/prev.png) 97% center no-repeat');
+
+            $("#nextLinkImg").click(function(){
+                $('#nextLinkImg').css('background','none');
+            });
+            $("#prevLinkImg").click(function(){
+                $('#prevLinkImg').css('background','none');
+            });
+          }
+        });
       }
+
     });
 
   //-->
